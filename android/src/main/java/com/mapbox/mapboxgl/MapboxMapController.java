@@ -301,24 +301,24 @@ final class MapboxMapController
     @Override
     public void onStyleLoaded(@NonNull Style style) {
       MapboxMapController.this.style = style;
-      for(String annotationType : annotationOrder) {
-        switch (annotationType) {
-          case "AnnotationType.fill":
-            enableFillManager(style);
-            break;
-          case "AnnotationType.line":
-            enableLineManager(style);
-            break;
-          case "AnnotationType.circle":
-            enableCircleManager(style);
-            break;
-          case "AnnotationType.symbol":
-            enableSymbolManager(style);
-            break;
-          default:
-            throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
-        }
-      }
+//       for(String annotationType : annotationOrder) {
+//         switch (annotationType) {
+//           case "AnnotationType.fill":
+//             enableFillManager(style);
+//             break;
+//           case "AnnotationType.line":
+//             enableLineManager(style);
+//             break;
+//           case "AnnotationType.circle":
+//             enableCircleManager(style);
+//             break;
+//           case "AnnotationType.symbol":
+//             enableSymbolManager(style);
+//             break;
+//           default:
+//             throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
+//         }
+//       }
 
       if (myLocationEnabled) {
         if (hasLocationPermission()) {
