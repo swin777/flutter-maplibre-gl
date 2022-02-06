@@ -309,16 +309,16 @@ final class MapboxMapController
       MapboxMapController.this.style = style;
        for(String annotationType : annotationOrder) {
          switch (annotationType) {
-           case "AnnotationType.fill":
+           case "AnnotationType.fill_":
              enableFillManager(style);
              break;
-           case "AnnotationType.line":
+           case "AnnotationType.line_":
              enableLineManager(style);
              break;
-           case "AnnotationType.circle":
+           case "AnnotationType.circle_":
              enableCircleManager(style);
              break;
-           case "AnnotationType.symbol":
+           case "AnnotationType.symbol_":
              enableSymbolManager(style);
              break;
            default:
@@ -388,32 +388,32 @@ final class MapboxMapController
   private void enableSymbolManager(@NonNull Style style) {
     if (symbolManager == null) {
       symbolManager = new SymbolManager(mapView, mapboxMap, style);
-//      symbolManager.setIconAllowOverlap(true);
-//      symbolManager.setIconIgnorePlacement(true);
-//      symbolManager.setTextAllowOverlap(true);
-//      symbolManager.setTextIgnorePlacement(true);
-//      symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      symbolManager.setIconAllowOverlap(true);
+      symbolManager.setIconIgnorePlacement(true);
+      symbolManager.setTextAllowOverlap(true);
+      symbolManager.setTextIgnorePlacement(true);
+      symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableLineManager(@NonNull Style style) {
     if (lineManager == null) {
       lineManager = new LineManager(mapView, mapboxMap, style);
-      //lineManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      lineManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableCircleManager(@NonNull Style style) {
     if (circleManager == null) {
       circleManager = new CircleManager(mapView, mapboxMap, style);
-      //circleManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      circleManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableFillManager(@NonNull Style style) {
     if (fillManager ==  null) {
       fillManager = new FillManager(mapView, mapboxMap, style);
-      //fillManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      fillManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
