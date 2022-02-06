@@ -691,6 +691,17 @@ class MethodChannelMaplibreGl extends MapLibreGlPlatform {
   }
 
   @override
+  Future<void> addRouteLayer(String featureJson) async {
+    try {
+      return await _channel.invokeMethod('style#addRouteLayer', <String, Object>{
+        'featureJson': featureJson,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  @override
   Future<LatLng> toLatLng(Point screenLocation) async {
     try {
       var latLngMap =

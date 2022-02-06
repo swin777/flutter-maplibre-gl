@@ -264,6 +264,10 @@ abstract class MapLibreGlPlatform {
     throw UnimplementedError('addLayerBelow() has not been implemented.');
   }
 
+  Future<void> addRouteLayer(String featureJson) async {
+    throw UnimplementedError('addRouteLayer() has not been implemented.');
+  }
+
   Future<void> removeLayer(String imageLayerId) async {
     throw UnimplementedError('removeLayer() has not been implemented.');
   }

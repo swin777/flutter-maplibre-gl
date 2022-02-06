@@ -66,14 +66,14 @@ packages:
       path: maplibre_gl_platform_interface
       relative: true
     source: path
-    version: "0.14.0"
+    version: "0.15.0"
   maplibre_gl_web:
     dependency: "direct main"
     description:
       path: maplibre_gl_web
       relative: true
     source: path
-    version: "0.14.0"
+    version: "0.15.0"
   meta:
     dependency: transitive
     description:

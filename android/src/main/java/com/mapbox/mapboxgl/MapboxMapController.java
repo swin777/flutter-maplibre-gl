@@ -71,6 +71,11 @@ import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
 
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -83,6 +88,7 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
+
 
 /**
  * Controller of a single MapboxMaps MapView instance.
@@ -980,6 +986,26 @@ final class MapboxMapController
           result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
         }
         style.removeLayer((String) call.argument("imageLayerId"));
+        result.success(null);
+        break;
+      }
+      case "style#addRouteLayer": {
+        if (style == null) {
+          result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
+        }
+        Feature feature = Feature.fromJson(call.argument("featureJson"));
+        GeoJsonSource geoJsonSource = new GeoJsonSource("geojson-route-boundaries", feature);
+        style.addSource(geoJsonSource);
+        LineLayer lineLayer = new LineLayer("routelayer", "geojson-route-boundaries")
+                    .withProperties(
+                        PropertyFactory.lineCap(Property.LINE_CAP_SQUARE),
+                        PropertyFactory.lineJoin(Property.LINE_JOIN_MITER),
+                        PropertyFactory.lineOpacity(.7f),
+                        PropertyFactory.lineWidth(4f),
+                        PropertyFactory.lineColor("#ff0000")
+                        //PropertyFactory.lineColor(getColor(R.color.colorPrimaryDark))
+                    );
+        style.addLayer(lineLayer);
         result.success(null);
         break;
       }
