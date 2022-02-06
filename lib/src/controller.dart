@@ -865,6 +865,11 @@ class MaplibreMapController extends ChangeNotifier {
         .addLayerBelow(imageLayerId, imageSourceId, belowLayerId);
   }
 
+  Future<void> addRouteLayer(String featureJson) {
+    return MapLibreGlPlatform.getInstance(_id)
+        .addRouteLayer(featureJson);
+  }
+
   /// Removes a Mapbox style layer
   Future<void> removeLayer(String imageLayerId) {
     return MapLibreGlPlatform.getInstance(_id).removeLayer(imageLayerId);
