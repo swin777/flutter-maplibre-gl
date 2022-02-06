@@ -307,24 +307,24 @@ final class MapboxMapController
     @Override
     public void onStyleLoaded(@NonNull Style style) {
       MapboxMapController.this.style = style;
-//       for(String annotationType : annotationOrder) {
-//         switch (annotationType) {
-//           case "AnnotationType.fill":
-//             enableFillManager(style);
-//             break;
-//           case "AnnotationType.line":
-//             enableLineManager(style);
-//             break;
-//           case "AnnotationType.circle":
-//             enableCircleManager(style);
-//             break;
-//           case "AnnotationType.symbol":
-//             enableSymbolManager(style);
-//             break;
-//           default:
-//             throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
-//         }
-//       }
+       for(String annotationType : annotationOrder) {
+         switch (annotationType) {
+           case "AnnotationType.fill":
+             enableFillManager(style);
+             break;
+           case "AnnotationType.line":
+             enableLineManager(style);
+             break;
+           case "AnnotationType.circle":
+             enableCircleManager(style);
+             break;
+           case "AnnotationType.symbol":
+             enableSymbolManager(style);
+             break;
+           default:
+             throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
+         }
+       }
 
       if (myLocationEnabled) {
         if (hasLocationPermission()) {
@@ -388,11 +388,11 @@ final class MapboxMapController
   private void enableSymbolManager(@NonNull Style style) {
     if (symbolManager == null) {
       symbolManager = new SymbolManager(mapView, mapboxMap, style);
-      symbolManager.setIconAllowOverlap(true);
-      symbolManager.setIconIgnorePlacement(true);
-      symbolManager.setTextAllowOverlap(true);
-      symbolManager.setTextIgnorePlacement(true);
-      symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+//      symbolManager.setIconAllowOverlap(true);
+//      symbolManager.setIconIgnorePlacement(true);
+//      symbolManager.setTextAllowOverlap(true);
+//      symbolManager.setTextIgnorePlacement(true);
+//      symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
