@@ -307,24 +307,24 @@ final class MapboxMapController
     @Override
     public void onStyleLoaded(@NonNull Style style) {
       MapboxMapController.this.style = style;
-//       for(String annotationType : annotationOrder) {
-//         switch (annotationType) {
-//           case "AnnotationType.fill":
-//             enableFillManager(style);
-//             break;
-//           case "AnnotationType.line":
-//             enableLineManager(style);
-//             break;
-//           case "AnnotationType.circle":
-//             enableCircleManager(style);
-//             break;
-//           case "AnnotationType.symbol":
-//             enableSymbolManager(style);
-//             break;
-//           default:
-//             throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
-//         }
-//       }
+       for(String annotationType : annotationOrder) {
+         switch (annotationType) {
+           case "AnnotationType.fill":
+             enableFillManager(style);
+             break;
+           case "AnnotationType.line":
+             enableLineManager(style);
+             break;
+           case "AnnotationType.circle":
+             enableCircleManager(style);
+             break;
+           case "AnnotationType.symbol":
+             enableSymbolManager(style);
+             break;
+           default:
+             throw new IllegalArgumentException("Unknown annotation type: " + annotationType + ", must be either 'fill', 'line', 'circle' or 'symbol'");
+         }
+       }
 
       if (myLocationEnabled) {
         if (hasLocationPermission()) {
@@ -392,28 +392,28 @@ final class MapboxMapController
       symbolManager.setIconIgnorePlacement(true);
       symbolManager.setTextAllowOverlap(true);
       symbolManager.setTextIgnorePlacement(true);
-      symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      //symbolManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableLineManager(@NonNull Style style) {
     if (lineManager == null) {
       lineManager = new LineManager(mapView, mapboxMap, style);
-      lineManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      //lineManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableCircleManager(@NonNull Style style) {
     if (circleManager == null) {
       circleManager = new CircleManager(mapView, mapboxMap, style);
-      circleManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      //circleManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
   private void enableFillManager(@NonNull Style style) {
     if (fillManager ==  null) {
       fillManager = new FillManager(mapView, mapboxMap, style);
-      fillManager.addClickListener(MapboxMapController.this::onAnnotationClick);
+      //fillManager.addClickListener(MapboxMapController.this::onAnnotationClick);
     }
   }
 
