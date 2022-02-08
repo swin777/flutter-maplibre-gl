@@ -38,11 +38,6 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
         arguments args: Any?,
         registrar: FlutterPluginRegistrar
     ) {
-        if let args = args as? [String: Any] {
-            if let token = args["accessToken"] as? String? {
-                MGLAccountManager.accessToken = token
-            }
-        }
         mapView = MGLMapView(frame: frame)
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.registrar = registrar
@@ -329,77 +324,77 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
             }
             result(nil)
 
-        case "symbolLayer#add":
-            guard let arguments = methodCall.arguments as? [String: Any] else { return }
-            guard let sourceId = arguments["sourceId"] as? String else { return }
-            guard let layerId = arguments["layerId"] as? String else { return }
-            guard let properties = arguments["properties"] as? [String: String] else { return }
-            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
-            let belowLayerId = arguments["belowLayerId"] as? String
-            let sourceLayer = arguments["sourceLayer"] as? String
-            addSymbolLayer(
-                sourceId: sourceId,
-                layerId: layerId,
-                belowLayerId: belowLayerId,
-                sourceLayerIdentifier: sourceLayer,
-                enableInteraction: enableInteraction,
-                properties: properties
-            )
-            result(nil)
+//        case "symbolLayer#add":
+//            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+//            guard let sourceId = arguments["sourceId"] as? String else { return }
+//            guard let layerId = arguments["layerId"] as? String else { return }
+//            guard let properties = arguments["properties"] as? [String: String] else { return }
+//            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
+//            let belowLayerId = arguments["belowLayerId"] as? String
+//            let sourceLayer = arguments["sourceLayer"] as? String
+//            addSymbolLayer(
+//                sourceId: sourceId,
+//                layerId: layerId,
+//                belowLayerId: belowLayerId,
+//                sourceLayerIdentifier: sourceLayer,
+//                enableInteraction: enableInteraction,
+//                properties: properties
+//            )
+//            result(nil)
 
-        case "lineLayer#add":
-            guard let arguments = methodCall.arguments as? [String: Any] else { return }
-            guard let sourceId = arguments["sourceId"] as? String else { return }
-            guard let layerId = arguments["layerId"] as? String else { return }
-            guard let properties = arguments["properties"] as? [String: String] else { return }
-            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
-            let belowLayerId = arguments["belowLayerId"] as? String
-            let sourceLayer = arguments["sourceLayer"] as? String
-            addLineLayer(
-                sourceId: sourceId,
-                layerId: layerId,
-                belowLayerId: belowLayerId,
-                sourceLayerIdentifier: sourceLayer,
-                enableInteraction: enableInteraction,
-                properties: properties
-            )
-            result(nil)
+//        case "lineLayer#add":
+//            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+//            guard let sourceId = arguments["sourceId"] as? String else { return }
+//            guard let layerId = arguments["layerId"] as? String else { return }
+//            guard let properties = arguments["properties"] as? [String: String] else { return }
+//            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
+//            let belowLayerId = arguments["belowLayerId"] as? String
+//            let sourceLayer = arguments["sourceLayer"] as? String
+//            addLineLayer(
+//                sourceId: sourceId,
+//                layerId: layerId,
+//                belowLayerId: belowLayerId,
+//                sourceLayerIdentifier: sourceLayer,
+//                enableInteraction: enableInteraction,
+//                properties: properties
+//            )
+//            result(nil)
 
-        case "fillLayer#add":
-            guard let arguments = methodCall.arguments as? [String: Any] else { return }
-            guard let sourceId = arguments["sourceId"] as? String else { return }
-            guard let layerId = arguments["layerId"] as? String else { return }
-            guard let properties = arguments["properties"] as? [String: String] else { return }
-            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
-            let belowLayerId = arguments["belowLayerId"] as? String
-            let sourceLayer = arguments["sourceLayer"] as? String
-            addFillLayer(
-                sourceId: sourceId,
-                layerId: layerId,
-                belowLayerId: belowLayerId,
-                sourceLayerIdentifier: sourceLayer,
-                enableInteraction: enableInteraction,
-                properties: properties
-            )
-            result(nil)
+//        case "fillLayer#add":
+//            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+//            guard let sourceId = arguments["sourceId"] as? String else { return }
+//            guard let layerId = arguments["layerId"] as? String else { return }
+//            guard let properties = arguments["properties"] as? [String: String] else { return }
+//            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
+//            let belowLayerId = arguments["belowLayerId"] as? String
+//            let sourceLayer = arguments["sourceLayer"] as? String
+//            addFillLayer(
+//                sourceId: sourceId,
+//                layerId: layerId,
+//                belowLayerId: belowLayerId,
+//                sourceLayerIdentifier: sourceLayer,
+//                enableInteraction: enableInteraction,
+//                properties: properties
+//            )
+//            result(nil)
 
-        case "circleLayer#add":
-            guard let arguments = methodCall.arguments as? [String: Any] else { return }
-            guard let sourceId = arguments["sourceId"] as? String else { return }
-            guard let layerId = arguments["layerId"] as? String else { return }
-            guard let properties = arguments["properties"] as? [String: String] else { return }
-            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
-            let belowLayerId = arguments["belowLayerId"] as? String
-            let sourceLayer = arguments["sourceLayer"] as? String
-            addCircleLayer(
-                sourceId: sourceId,
-                layerId: layerId,
-                belowLayerId: belowLayerId,
-                sourceLayerIdentifier: sourceLayer,
-                enableInteraction: enableInteraction,
-                properties: properties
-            )
-            result(nil)
+//        case "circleLayer#add":
+//            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+//            guard let sourceId = arguments["sourceId"] as? String else { return }
+//            guard let layerId = arguments["layerId"] as? String else { return }
+//            guard let properties = arguments["properties"] as? [String: String] else { return }
+//            guard let enableInteraction = arguments["enableInteraction"] as? Bool else { return }
+//            let belowLayerId = arguments["belowLayerId"] as? String
+//            let sourceLayer = arguments["sourceLayer"] as? String
+//            addCircleLayer(
+//                sourceId: sourceId,
+//                layerId: layerId,
+//                belowLayerId: belowLayerId,
+//                sourceLayerIdentifier: sourceLayer,
+//                enableInteraction: enableInteraction,
+//                properties: properties
+//            )
+//            result(nil)
 
         case "hillshadeLayer#add":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
