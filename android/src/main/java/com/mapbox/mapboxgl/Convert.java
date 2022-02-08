@@ -52,7 +52,7 @@ class Convert {
 //    }
 //  }
 
-  private static boolean toBoolean(Object o) {
+  static boolean toBoolean(Object o) {
     return (Boolean) o;
   }
 
@@ -122,15 +122,15 @@ class Convert {
     }
   }
 
-  private static double toDouble(Object o) {
+  static double toDouble(Object o) {
     return ((Number) o).doubleValue();
   }
 
-  private static float toFloat(Object o) {
+  static float toFloat(Object o) {
     return ((Number) o).floatValue();
   }
 
-  private static Float toFloatWrapper(Object o) {
+  static Float toFloatWrapper(Object o) {
     return (o == null) ? null : toFloat(o);
   }
 
@@ -150,16 +150,16 @@ class Convert {
     return data;
   }
 
-  private static Object toJson(LatLng latLng) {
+  static Object toJson(LatLng latLng) {
     return Arrays.asList(latLng.getLatitude(), latLng.getLongitude());
   }
 
-  private static LatLng toLatLng(Object o) {
+  static LatLng toLatLng(Object o) {
     final List<?> data = toList(o);
     return new LatLng(toDouble(data.get(0)), toDouble(data.get(1)));
   }
 
-  private static LatLngBounds toLatLngBounds(Object o) {
+  static LatLngBounds toLatLngBounds(Object o) {
     if (o == null) {
       return null;
     }
@@ -171,7 +171,24 @@ class Convert {
     return builder.build();
   }
 
-  static List<LatLng> toLatLngList(Object o) {
+  static List<LatLng> toLatLngList(Object o, boolean flippedOrder) {
+    if (o == null) {
+      return null;
+    }
+    final List<?> data = toList(o);
+    List<LatLng> latLngList = new ArrayList<>();
+    for (int i = 0; i < data.size(); i++) {
+      final List<?> coords = toList(data.get(i));
+      if (flippedOrder) {
+        latLngList.add(new LatLng(toDouble(coords.get(1)), toDouble(coords.get(0))));
+      } else {
+        latLngList.add(new LatLng(toDouble(coords.get(0)), toDouble(coords.get(1))));
+      }
+    }
+    return latLngList;
+  }
+
+  private static List<LatLng> toLatLngList(Object o) {
     if (o == null) {
       return null;
     }
@@ -209,7 +226,7 @@ class Convert {
     return Polygon.fromLngLats(points);
   }
 
-  private static List<?> toList(Object o) {
+  static List<?> toList(Object o) {
     return (List<?>) o;
   }
 
@@ -234,7 +251,7 @@ class Convert {
     return new Point(toPixels(data.get(0), density), toPixels(data.get(1), density));
   }
 
-  private static String toString(Object o) {
+  static String toString(Object o) {
     return (String) o;
   }
 
