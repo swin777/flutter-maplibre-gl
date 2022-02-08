@@ -18,6 +18,15 @@ typedef void OnCameraIdleCallback();
 
 typedef void OnMapIdleCallback();
 
+typedef void OnFeatureInteractionCallback(
+    dynamic id, Point<double> point, LatLng coordinates);
+
+typedef void OnFeatureDragnCallback(dynamic id,
+    {required Point<double> point,
+    required LatLng origin,
+    required LatLng current,
+    required LatLng delta});
+
 /// Controller for a single MaplibreMap instance running on the host platform.
 ///
 /// Change listeners are notified upon changes to any of
@@ -151,7 +160,25 @@ class MaplibreMapController extends ChangeNotifier {
         .add((location) {
       onUserLocationUpdated?.call(location);
     });
+
+     MapLibreGlPlatform.getInstance(_id).onFeatureTappedPlatform.add((payload) {
+      for (final fun
+          in List<OnFeatureInteractionCallback>.from(onFeatureTapped)) {
+        fun(payload["id"], payload["point"], payload["latLng"]);
+      }
+
+      MapLibreGlPlatform.getInstance(_id).onFeatureDraggedPlatform.add((payload) {
+        for (final fun in List<OnFeatureDragnCallback>.from(onFeatureDrag)) {
+          fun(payload["id"],
+              point: payload["point"],
+              origin: payload["origin"],
+              current: payload["current"],
+              delta: payload["delta"]);
+        }
+      });
+    });
   }
+  
 
   static MaplibreMapController init(
       int id, CameraPosition initialCameraPosition,
@@ -204,6 +231,11 @@ class MaplibreMapController extends ChangeNotifier {
   /// Callbacks to receive tap events for info windows on symbols
   final ArgumentCallbacks<Symbol> onInfoWindowTapped =
       ArgumentCallbacks<Symbol>();
+
+  /// Callbacks to receive tap events for features (geojson layer) placed on this map.
+  final onFeatureTapped = <OnFeatureInteractionCallback>[];
+
+  final onFeatureDrag = <OnFeatureDragnCallback>[];
 
   /// The current set of symbols on this map.
   ///
@@ -283,6 +315,24 @@ class MaplibreMapController extends ChangeNotifier {
   Future<bool?> moveCamera(CameraUpdate cameraUpdate) async {
     return MapLibreGlPlatform.getInstance(_id).moveCamera(cameraUpdate);
   }
+
+  Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson,
+      {String? promoteId}) async {
+    await MapLibreGlPlatform.getInstance(_id).addGeoJsonSource(sourceId, geojson,
+        promoteId: promoteId);
+  }
+
+  Future<void> setGeoJsonSource(
+      String sourceId, Map<String, dynamic> geojson) async {
+    await MapLibreGlPlatform.getInstance(_id).setGeoJsonSource(sourceId, geojson);
+  }
+
+  Future<void> setGeoJsonFeature(
+      String sourceId, Map<String, dynamic> geojsonFeature) async {
+    await MapLibreGlPlatform.getInstance(_id).setFeatureForGeoJsonSource(
+        sourceId, geojsonFeature);
+  }
+
 
   /// Updates user location tracking mode.
   ///
@@ -852,10 +902,133 @@ class MaplibreMapController extends ChangeNotifier {
     return MapLibreGlPlatform.getInstance(_id).removeImageSource(imageSourceId);
   }
 
+  Future<void> removeSource(String sourceId) {
+    return MapLibreGlPlatform.getInstance(_id).removeSource(sourceId);
+  }
+
+  Future<void> addSymbolLayer(
+      String sourceId, String layerId, SymbolLayerProperties properties,
+      {String? belowLayerId,
+      String? sourceLayer,
+      bool enableInteraction = true}) async {
+    await MapLibreGlPlatform.getInstance(_id).addSymbolLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+      enableInteraction: enableInteraction,
+    );
+  }
+
+  Future<void> addLineLayer(
+      String sourceId, String layerId, LineLayerProperties properties,
+      {String? belowLayerId,
+      String? sourceLayer,
+      bool enableInteraction = true}) async {
+    await MapLibreGlPlatform.getInstance(_id).addLineLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+      enableInteraction: enableInteraction,
+    );
+  }
+
+  Future<void> addFillLayer(
+      String sourceId, String layerId, FillLayerProperties properties,
+      {String? belowLayerId,
+      String? sourceLayer,
+      bool enableInteraction = true}) async {
+    await MapLibreGlPlatform.getInstance(_id).addFillLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+      enableInteraction: enableInteraction,
+    );
+  }
+
+  Future<void> addCircleLayer(
+      String sourceId, String layerId, CircleLayerProperties properties,
+      {String? belowLayerId,
+      String? sourceLayer,
+      bool enableInteraction = true}) async {
+    await MapLibreGlPlatform.getInstance(_id).addCircleLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+      enableInteraction: enableInteraction,
+    );
+  }
+
+  Future<void> addRasterLayer(
+      String sourceId, String layerId, RasterLayerProperties properties,
+      {String? belowLayerId, String? sourceLayer}) async {
+    await MapLibreGlPlatform.getInstance(_id).addRasterLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+    );
+  }
+
+  Future<void> addHillshadeLayer(
+      String sourceId, String layerId, HillshadeLayerProperties properties,
+      {String? belowLayerId, String? sourceLayer}) async {
+    await MapLibreGlPlatform.getInstance(_id).addHillshadeLayer(
+      sourceId,
+      layerId,
+      properties.toJson(),
+      belowLayerId: belowLayerId,
+      sourceLayer: sourceLayer,
+    );
+  }
+
   /// Adds a Mapbox style layer to the map's style at render time.
-  Future<void> addLayer(String imageLayerId, String imageSourceId) {
-    return MapLibreGlPlatform.getInstance(_id)
-        .addLayer(imageLayerId, imageSourceId);
+  // Future<void> addLayer(String imageLayerId, String imageSourceId) {
+  //   return MapLibreGlPlatform.getInstance(_id)
+  //       .addLayer(imageLayerId, imageSourceId);
+  // }
+  Future<void> addLayer(
+      String sourceId, String layerId, LayerProperties properties,
+      {String? belowLayerId,
+      bool enableInteraction = true,
+      String? sourceLayer}) async {
+    if (properties is FillLayerProperties) {
+      addFillLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is LineLayerProperties) {
+      addLineLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is SymbolLayerProperties) {
+      addSymbolLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is CircleLayerProperties) {
+      addCircleLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is RasterLayerProperties) {
+      addRasterLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
+    } else if (properties is HillshadeLayerProperties) {
+      addHillshadeLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
+    } else {
+      throw UnimplementedError("Unknown layer type $properties");
+    }
   }
 
   /// Adds a Mapbox style layer below the layer provided with belowLayerId to the map's style at render time,
