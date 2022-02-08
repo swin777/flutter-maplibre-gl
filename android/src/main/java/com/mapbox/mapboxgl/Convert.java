@@ -188,7 +188,7 @@ class Convert {
     return latLngList;
   }
 
-  private static List<LatLng> toLatLngList(Object o) {
+  static List<LatLng> toLatLngList(Object o) {
     if (o == null) {
       return null;
     }
@@ -201,7 +201,7 @@ class Convert {
     return latLngList;
   }
 
-  private static List<List<LatLng>> toLatLngListList(Object o) {
+  static List<List<LatLng>> toLatLngListList(Object o) {
     if (o == null) {
       return null;
     }
