@@ -358,4 +358,17 @@ class Convert {
         }
         return polygons
     }
+    
+    class func getCoordinates(options: Any?) -> [CLLocationCoordinate2D] {
+        var coordinates: [CLLocationCoordinate2D] = []
+
+        if let options = options as? [String: Any],
+           let geometry = options["geometry"] as? [[Double]], geometry.count > 0
+        {
+            for coordinate in geometry {
+                coordinates.append(CLLocationCoordinate2DMake(coordinate[0], coordinate[1]))
+            }
+        }
+        return coordinates
+    }
 }
