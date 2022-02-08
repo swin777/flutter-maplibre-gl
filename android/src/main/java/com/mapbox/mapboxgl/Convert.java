@@ -92,13 +92,13 @@ class Convert {
         return CameraUpdateFactory.newLatLng(toLatLng(data.get(1)));
       case "newLatLngBounds":
         return CameraUpdateFactory.newLatLngBounds(toLatLngBounds(data.get(1)), toPixels(data.get(2), density),
-            toPixels(data.get(3), density), toPixels(data.get(4), density), toPixels(data.get(5), density));
+                toPixels(data.get(3), density), toPixels(data.get(4), density), toPixels(data.get(5), density));
       case "newLatLngZoom":
         return CameraUpdateFactory.newLatLngZoom(toLatLng(data.get(1)), toFloat(data.get(2)));
       case "scrollBy":
         mapboxMap.scrollBy(
-          toFractionalPixels(data.get(1), density),
-          toFractionalPixels(data.get(2), density)
+                toFractionalPixels(data.get(1), density),
+                toFractionalPixels(data.get(2), density)
         );
         return null;
       case "zoomBy":
@@ -258,8 +258,8 @@ class Convert {
     if (minMaxZoomPreference != null) {
       final List<?> zoomPreferenceData = toList(minMaxZoomPreference);
       sink.setMinMaxZoomPreference( //
-        toFloatWrapper(zoomPreferenceData.get(0)), //
-        toFloatWrapper(zoomPreferenceData.get(1)));
+              toFloatWrapper(zoomPreferenceData.get(0)), //
+              toFloatWrapper(zoomPreferenceData.get(1)));
     }
     final Object rotateGesturesEnabled = data.get("rotateGesturesEnabled");
     if (rotateGesturesEnabled != null) {

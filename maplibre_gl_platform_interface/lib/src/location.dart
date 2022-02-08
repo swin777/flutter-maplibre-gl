@@ -40,6 +40,10 @@ class LatLng {
     return LatLng(json[0], json[1]);
   }
 
+  dynamic toGeoJsonCoordinates() {
+    return <double>[longitude, latitude];
+  }
+
   @override
   String toString() => '$runtimeType($latitude, $longitude)';
 

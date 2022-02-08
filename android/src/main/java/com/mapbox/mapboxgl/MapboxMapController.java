@@ -68,13 +68,20 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.HillshadeLayer;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
+import com.mapbox.geojson.FeatureCollection;
 
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,6 +90,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Collections;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -142,6 +152,8 @@ final class MapboxMapController
   private Style style;
   private List<String> annotationOrder;
   private List<String> annotationConsumeTapEvents;
+  private Map<String, FeatureCollection> addedFeaturesByLayer;
+  private Set<String> interactiveFeatureLayerIds;
 
   MapboxMapController(
     int id,
@@ -167,6 +179,8 @@ final class MapboxMapController
     methodChannel.setMethodCallHandler(this);
     this.annotationOrder = annotationOrder;
     this.annotationConsumeTapEvents = annotationConsumeTapEvents;
+    this.addedFeaturesByLayer = new HashMap<String, FeatureCollection>();
+    this.interactiveFeatureLayerIds = new HashSet<>();
   }
 
   @Override
@@ -385,6 +399,189 @@ final class MapboxMapController
     methodChannel.invokeMethod("map#onUserLocationUpdated", arguments);
   }
 
+  private void addGeoJsonSource(String sourceName, String source) {
+    FeatureCollection featureCollection = FeatureCollection.fromJson(source);
+    GeoJsonSource geoJsonSource = new GeoJsonSource(sourceName, featureCollection);
+    addedFeaturesByLayer.put(sourceName, featureCollection);
+
+    style.addSource(geoJsonSource);
+  }
+
+  private void setGeoJsonSource(String sourceName, String geojson) {
+    FeatureCollection featureCollection = FeatureCollection.fromJson(geojson);
+    GeoJsonSource geoJsonSource = style.getSourceAs(sourceName);
+    addedFeaturesByLayer.put(sourceName, featureCollection);
+
+    geoJsonSource.setGeoJson(featureCollection);
+  }
+
+  private void setGeoJsonFeature(String sourceName, String geojsonFeature) {
+    Feature feature = Feature.fromJson(geojsonFeature);
+    FeatureCollection featureCollection = addedFeaturesByLayer.get(sourceName);
+    GeoJsonSource geoJsonSource = style.getSourceAs(sourceName);
+    if (featureCollection != null && geoJsonSource != null) {
+      final List<Feature> features = featureCollection.features();
+      for (int i = 0; i < features.size(); i++) {
+        final String id = features.get(i).id();
+        if (id.equals(feature.id())) {
+          features.set(i, feature);
+          break;
+        }
+      }
+
+      geoJsonSource.setGeoJson(featureCollection);
+    }
+  }
+
+  private void addSymbolLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          String sourceLayer,
+          PropertyValue[] properties,
+          boolean enableInteraction,
+          Expression filter) {
+    SymbolLayer symbolLayer = new SymbolLayer(layerName, sourceName);
+    symbolLayer.setProperties(properties);
+    if (sourceLayer != null) {
+      symbolLayer.setSourceLayer(sourceLayer);
+    }
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(symbolLayer, belowLayerId);
+    } else {
+      style.addLayer(symbolLayer);
+    }
+    if (enableInteraction) {
+      interactiveFeatureLayerIds.add(layerName);
+    }
+  }
+
+  private void addLineLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          String sourceLayer,
+          PropertyValue[] properties,
+          boolean enableInteraction,
+          Expression filter) {
+    LineLayer lineLayer = new LineLayer(layerName, sourceName);
+    lineLayer.setProperties(properties);
+    if (sourceLayer != null) {
+      lineLayer.setSourceLayer(sourceLayer);
+    }
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(lineLayer, belowLayerId);
+    } else {
+      style.addLayer(lineLayer);
+    }
+    if (enableInteraction) {
+      interactiveFeatureLayerIds.add(layerName);
+    }
+  }
+
+  private void addFillLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          String sourceLayer,
+          PropertyValue[] properties,
+          boolean enableInteraction,
+          Expression filter) {
+    FillLayer fillLayer = new FillLayer(layerName, sourceName);
+    fillLayer.setProperties(properties);
+    if (sourceLayer != null) {
+      fillLayer.setSourceLayer(sourceLayer);
+    }
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(fillLayer, belowLayerId);
+    } else {
+      style.addLayer(fillLayer);
+    }
+    if (enableInteraction) {
+      interactiveFeatureLayerIds.add(layerName);
+    }
+  }
+
+  private void addCircleLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          String sourceLayer,
+          PropertyValue[] properties,
+          boolean enableInteraction,
+          Expression filter) {
+    CircleLayer circleLayer = new CircleLayer(layerName, sourceName);
+    circleLayer.setProperties(properties);
+    if (sourceLayer != null) {
+      circleLayer.setSourceLayer(sourceLayer);
+    }
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(circleLayer, belowLayerId);
+    } else {
+      style.addLayer(circleLayer);
+    }
+    if (enableInteraction) {
+      interactiveFeatureLayerIds.add(layerName);
+    }
+    ;
+  }
+
+  private void addRasterLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          PropertyValue[] properties,
+          Expression filter) {
+    RasterLayer layer = new RasterLayer(layerName, sourceName);
+    layer.setProperties(properties);
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(layer, belowLayerId);
+    } else {
+      style.addLayer(layer);
+    }
+  }
+
+  private void addHillshadeLayer(
+          String layerName,
+          String sourceName,
+          String belowLayerId,
+          PropertyValue[] properties,
+          Expression filter) {
+    HillshadeLayer layer = new HillshadeLayer(layerName, sourceName);
+    layer.setProperties(properties);
+
+    if (belowLayerId != null) {
+      style.addLayerBelow(layer, belowLayerId);
+    } else {
+      style.addLayer(layer);
+    }
+  }
+
+  private Feature firstFeatureOnLayers(RectF in) {
+    if (style != null) {
+      final List<Layer> layers = style.getLayers();
+      final List<String> layersInOrder = new ArrayList<String>();
+      for (Layer layer : layers) {
+        String id = layer.getId();
+        if (interactiveFeatureLayerIds.contains(id)) layersInOrder.add(id);
+      }
+      Collections.reverse(layersInOrder);
+
+      for (String id : layersInOrder) {
+        List<Feature> features = mapboxMap.queryRenderedFeatures(in, id);
+        if (!features.isEmpty()) {
+          return features.get(0);
+        }
+      }
+    }
+    return null;
+  }
+
   private void enableSymbolManager(@NonNull Style style) {
     if (symbolManager == null) {
       symbolManager = new SymbolManager(mapView, mapboxMap, style);
@@ -438,7 +635,7 @@ final class MapboxMapController
         result.success(null);
         break;
       }
-	    case "map#matchMapLanguageWithDeviceDefault": {
+      case "map#matchMapLanguageWithDeviceDefault": {
         try {
 		      localizationPlugin.matchMapLanguageWithDeviceDefault();
 			    result.success(null);
@@ -448,7 +645,7 @@ final class MapboxMapController
 		    }
         break;
       }
-	    case "map#setMapLanguage": {
+      case "map#setMapLanguage": {
   	    final String language = call.argument("language");
         try {
 		      localizationPlugin.setMapLanguage(language);
@@ -613,6 +810,103 @@ final class MapboxMapController
         });
         break;
       }
+
+      //추가시작
+      case "source#addGeoJson": {
+        final String sourceId = call.argument("sourceId");
+        final String geojson = call.argument("geojson");
+        addGeoJsonSource(sourceId, geojson);
+        result.success(null);
+        break;
+      }
+      case "source#setGeoJson": {
+        final String sourceId = call.argument("sourceId");
+        final String geojson = call.argument("geojson");
+        setGeoJsonSource(sourceId, geojson);
+        result.success(null);
+        break;
+      }
+      case "source#setFeature": {
+        final String sourceId = call.argument("sourceId");
+        final String geojsonFeature = call.argument("geojsonFeature");
+        setGeoJsonFeature(sourceId, geojsonFeature);
+        result.success(null);
+        break;
+      }
+      case "symbolLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final String sourceLayer = call.argument("sourceLayer");
+        final boolean enableInteraction = call.argument("enableInteraction");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretSymbolLayerProperties(call.argument("properties"));
+        addSymbolLayer(
+                layerId, sourceId, belowLayerId, sourceLayer, properties, enableInteraction, null);
+        result.success(null);
+        break;
+      }
+      case "lineLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final String sourceLayer = call.argument("sourceLayer");
+        final boolean enableInteraction = call.argument("enableInteraction");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretLineLayerProperties(call.argument("properties"));
+        addLineLayer(
+                layerId, sourceId, belowLayerId, sourceLayer, properties, enableInteraction, null);
+        result.success(null);
+        break;
+      }
+      case "fillLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final String sourceLayer = call.argument("sourceLayer");
+        final boolean enableInteraction = call.argument("enableInteraction");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretFillLayerProperties(call.argument("properties"));
+        addFillLayer(
+                layerId, sourceId, belowLayerId, sourceLayer, properties, enableInteraction, null);
+        result.success(null);
+        break;
+      }
+      case "circleLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final String sourceLayer = call.argument("sourceLayer");
+        final boolean enableInteraction = call.argument("enableInteraction");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretCircleLayerProperties(call.argument("properties"));
+        addCircleLayer(
+                layerId, sourceId, belowLayerId, sourceLayer, properties, enableInteraction, null);
+        result.success(null);
+        break;
+      }
+      case "rasterLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretRasterLayerProperties(call.argument("properties"));
+        addRasterLayer(layerId, sourceId, belowLayerId, properties, null);
+        result.success(null);
+        break;
+      }
+      case "hillshadeLayer#add": {
+        final String sourceId = call.argument("sourceId");
+        final String layerId = call.argument("layerId");
+        final String belowLayerId = call.argument("belowLayerId");
+        final PropertyValue[] properties =
+                LayerPropertyConverter.interpretHillshadeLayerProperties(call.argument("properties"));
+        addHillshadeLayer(layerId, sourceId, belowLayerId, properties, null);
+        result.success(null);
+        break;
+      }
+      //추가끝.
+
       case "symbols#addAll": {
         List<String> newSymbolIds = new ArrayList<String>();
         final List<Object> options = call.argument("options");
