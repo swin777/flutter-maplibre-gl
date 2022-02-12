@@ -1259,6 +1259,26 @@ final class MapboxMapController
         result.success(null);
         break;
       }
+      case "style#addSource":
+      {
+        final String id = Convert.toString(call.argument("sourceId"));
+        final Map<String, Object> properties = (Map<String, Object>) call.argument("properties");
+        SourcePropertyConverter.addSource(id, properties, style);
+        result.success(null);
+        break;
+      }
+      case "style#removeSource":
+      {
+        if (style == null) {
+          result.error(
+              "STYLE IS NULL",
+              "The style is null. Has onStyleLoaded() already been invoked?",
+              null);
+        }
+        style.removeSource((String) call.argument("sourceId"));
+        result.success(null);
+        break;
+      }
       case "style#addLayer": {
         if (style == null) {
           result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
