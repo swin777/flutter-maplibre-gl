@@ -769,4 +769,70 @@ class MaplibreMapController extends MapLibreGlPlatform
     var zoom = _map.getZoom();
     return circumference * cos(latitude * (pi / 180)) / pow(2, zoom + 9);
   }
+
+  @override
+  Future<void> addCircleLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer, required bool enableInteraction}) {
+    // TODO: implement addCircleLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addFillLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer, required bool enableInteraction}) {
+    // TODO: implement addFillLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson, {String? promoteId}) {
+    // TODO: implement addGeoJsonSource
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addHillshadeLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer}) {
+    // TODO: implement addHillshadeLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addLineLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer, required bool enableInteraction}) {
+    // TODO: implement addLineLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addRasterLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer}) {
+    // TODO: implement addRasterLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addSource(String sourceId, SourceProperties properties) {
+    // TODO: implement addSource
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addSymbolLayer(String sourceId, String layerId, Map<String, dynamic> properties, {String? belowLayerId, String? sourceLayer, required bool enableInteraction}) {
+    // TODO: implement addSymbolLayer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeSource(String sourceId) {
+    // TODO: implement removeSource
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setFeatureForGeoJsonSource(String sourceId, Map<String, dynamic> geojsonFeature) {
+    // TODO: implement setFeatureForGeoJsonSource
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setGeoJsonSource(String sourceId, Map<String, dynamic> geojson) {
+    // TODO: implement setGeoJsonSource
+    throw UnimplementedError();
+  }
 }

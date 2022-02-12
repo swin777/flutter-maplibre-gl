@@ -995,41 +995,6 @@ class MaplibreMapController extends ChangeNotifier {
   //   return MapLibreGlPlatform.getInstance(_id)
   //       .addLayer(imageLayerId, imageSourceId);
   // }
-  Future<void> addLayer(
-      String sourceId, String layerId, LayerProperties properties,
-      {String? belowLayerId,
-      bool enableInteraction = true,
-      String? sourceLayer}) async {
-    if (properties is FillLayerProperties) {
-      addFillLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId,
-          enableInteraction: enableInteraction,
-          sourceLayer: sourceLayer);
-    } else if (properties is LineLayerProperties) {
-      addLineLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId,
-          enableInteraction: enableInteraction,
-          sourceLayer: sourceLayer);
-    } else if (properties is SymbolLayerProperties) {
-      addSymbolLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId,
-          enableInteraction: enableInteraction,
-          sourceLayer: sourceLayer);
-    } else if (properties is CircleLayerProperties) {
-      addCircleLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId,
-          enableInteraction: enableInteraction,
-          sourceLayer: sourceLayer);
-    } else if (properties is RasterLayerProperties) {
-      addRasterLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
-    } else if (properties is HillshadeLayerProperties) {
-      addHillshadeLayer(sourceId, layerId, properties,
-          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
-    } else {
-      throw UnimplementedError("Unknown layer type $properties");
-    }
-  }
 
   /// Adds a Mapbox style layer below the layer provided with belowLayerId to the map's style at render time,
   Future<void> addLayerBelow(
@@ -1072,5 +1037,45 @@ class MaplibreMapController extends ChangeNotifier {
   Future<double> getMetersPerPixelAtLatitude(double latitude) async {
     return MapLibreGlPlatform.getInstance(_id)
         .getMetersPerPixelAtLatitude(latitude);
+  }
+
+  Future<void> addSource(String sourceid, SourceProperties properties) async {
+    return MapLibreGlPlatform.getInstance(_id).addSource(sourceid, properties);
+  }
+
+  Future<void> addLayer(
+      String sourceId, String layerId, LayerProperties properties,
+      {String? belowLayerId,
+      bool enableInteraction = true,
+      String? sourceLayer}) async {
+    if (properties is FillLayerProperties) {
+      addFillLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is LineLayerProperties) {
+      addLineLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is SymbolLayerProperties) {
+      addSymbolLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is CircleLayerProperties) {
+      addCircleLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId,
+          enableInteraction: enableInteraction,
+          sourceLayer: sourceLayer);
+    } else if (properties is RasterLayerProperties) {
+      addRasterLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
+    } else if (properties is HillshadeLayerProperties) {
+      addHillshadeLayer(sourceId, layerId, properties,
+          belowLayerId: belowLayerId, sourceLayer: sourceLayer);
+    } else {
+      throw UnimplementedError("Unknown layer type $properties");
+    }
   }
 }
