@@ -638,14 +638,14 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let layerId = arguments["layerId"] as? String else { return }
             guard let layer = mapView.style?.layer(withIdentifier: layerId) else { return }
-            layer.visibility = .constant(.visible)
+            layer.visible = true
             result(nil)
             
         case "style#noneVisiableLayer":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
             guard let layerId = arguments["layerId"] as? String else { return }
             guard let layer = mapView.style?.layer(withIdentifier: layerId) else { return }
-            layer.visibility = .constant(.none)
+            layer.visible = false
             result(nil)
 
         case "source#addGeoJson":
