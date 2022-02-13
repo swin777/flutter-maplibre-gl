@@ -83,6 +83,10 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
+import static com.mapbox.mapboxsdk.style.layers.Property.NONE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -1300,6 +1304,22 @@ final class MapboxMapController
           result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
         }
         style.removeLayer((String) call.argument("imageLayerId"));
+        result.success(null);
+        break;
+      }
+      case "style#visiableLayer": {
+        if (style == null) {
+          result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
+        }
+        style.getLayer((String) call.argument("layerId")).setProperties(visibility(VISIBLE));
+        result.success(null);
+        break;
+      }
+      case "style#noneVisiableLayer": {
+        if (style == null) {
+          result.error("STYLE IS NULL", "The style is null. Has onStyleLoaded() already been invoked?", null);
+        }
+        style.getLayer((String) call.argument("layerId")).setProperties(visibility(NONE));
         result.success(null);
         break;
       }

@@ -1013,6 +1013,16 @@ class MaplibreMapController extends ChangeNotifier {
     return MapLibreGlPlatform.getInstance(_id).removeLayer(imageLayerId);
   }
 
+  /// visiable a Mapbox style layer
+  Future<void> visiableLayer(String layerId) {
+    return MapLibreGlPlatform.getInstance(_id).visiableLayer(layerId);
+  }
+
+  /// noneVisiable a Mapbox style layer
+  Future<void> noneVisiableLayer(String layerId) {
+    return MapLibreGlPlatform.getInstance(_id).noneVisiableLayer(layerId);
+  }
+
   /// Returns the point on the screen that corresponds to a geographical coordinate ([latLng]). The screen location is in screen pixels (not display pixels) relative to the top left of the map (not of the whole screen)
   ///
   /// Note: The resulting x and y coordinates are rounded to [int] on web, on other platforms they may differ very slightly (in the range of about 10^-10) from the actual nearest screen coordinate.

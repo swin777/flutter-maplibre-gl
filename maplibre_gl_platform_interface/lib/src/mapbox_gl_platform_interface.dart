@@ -276,6 +276,14 @@ abstract class MapLibreGlPlatform {
     throw UnimplementedError('removeLayer() has not been implemented.');
   }
 
+  Future<void> visiableLayer(String layerId) async {
+    throw UnimplementedError('visiableLayer() has not been implemented.');
+  }
+
+  Future<void> noneVisiableLayer(String layerId) async {
+    throw UnimplementedError('noneVisiableLayer() has not been implemented.');
+  }
+
   Future<Point> toScreenLocation(LatLng latLng) async {
     throw UnimplementedError('toScreenLocation() has not been implemented.');
   }

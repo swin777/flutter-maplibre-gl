@@ -703,6 +703,26 @@ class MethodChannelMaplibreGl extends MapLibreGlPlatform {
   }
 
   @override
+  Future<void> visiableLayer(String layerId) async {
+    try {
+      return await _channel.invokeMethod(
+          'style#visiableLayer', <String, Object>{'layerId': layerId});
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  @override
+  Future<void> noneVisiableLayer(String layerId) async {
+    try {
+      return await _channel.invokeMethod(
+          'style#noneVisiableLayer', <String, Object>{'layerId': layerId});
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  @override
   Future<void> addRouteLayer(String featureJson) async {
     try {
       return await _channel.invokeMethod('style#addRouteLayer', <String, Object>{

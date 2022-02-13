@@ -633,6 +633,20 @@ class MapboxMapController: NSObject, FlutterPlatformView, MGLMapViewDelegate, Ma
             interactiveFeatureLayerIds.remove(layerId)
             mapView.style?.removeLayer(layer)
             result(nil)
+            
+        case "style#visiableLayer":
+            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+            guard let layerId = arguments["layerId"] as? String else { return }
+            guard let layer = mapView.style?.layer(withIdentifier: layerId) else { return }
+            layer.visibility = .constant(.visible)
+            result(nil)
+            
+        case "style#noneVisiableLayer":
+            guard let arguments = methodCall.arguments as? [String: Any] else { return }
+            guard let layerId = arguments["layerId"] as? String else { return }
+            guard let layer = mapView.style?.layer(withIdentifier: layerId) else { return }
+            layer.visibility = .constant(.none)
+            result(nil)
 
         case "source#addGeoJson":
             guard let arguments = methodCall.arguments as? [String: Any] else { return }
