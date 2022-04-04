@@ -28,7 +28,7 @@ class LineManager extends FeatureManager<LineOptions> {
         'line-gap-width': ['get', 'lineGapWidth'],
         'line-offset': ['get', 'lineOffset'],
         'line-blur': ['get', 'lineBlur'],
-        //'line-pattern': ['get', 'linePattern'],
+        'line-pattern': ['get', 'linePattern'],
       }
     });
   }
