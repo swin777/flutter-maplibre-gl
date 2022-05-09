@@ -66,9 +66,9 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
     return controller.removeImageSource(imageSourceId);
   }
 
-  Future<void> addLayer(String imageLayerId, String imageSourceId) {
-    return controller.addLayer(imageLayerId, imageSourceId);
-  }
+  // Future<void> addLayer(String imageLayerId, String imageSourceId) {
+  //   return controller.addLayer(imageLayerId, imageSourceId);
+  // }
 
   Future<void> addLayerBelow(
       String imageLayerId, String imageSourceId, String belowLayerId) {
@@ -130,12 +130,12 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
                                 }
                               : null,
                         ),
-                        TextButton(
-                          child: const Text('Show layer'),
-                          onPressed: sourceAdded
-                              ? () => addLayer(LAYER_ID, SOURCE_ID)
-                              : null,
-                        ),
+                        // TextButton(
+                        //   child: const Text('Show layer'),
+                        //   onPressed: sourceAdded
+                        //       ? () => addLayer(LAYER_ID, SOURCE_ID)
+                        //       : null,
+                        // ),
                         TextButton(
                           child: const Text('Show layer below water'),
                           onPressed: sourceAdded

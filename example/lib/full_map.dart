@@ -29,12 +29,15 @@ class FullMapState extends State<FullMap> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MaplibreMap(
-      onMapCreated: _onMapCreated,
-      initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
-      onStyleLoadedCallback: onStyleLoadedCallback,
-    ));
+      body: MaplibreMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: const CameraPosition(target: LatLng(37.541, 126.986), zoom: 16, tilt: 0),
+        onStyleLoadedCallback: onStyleLoadedCallback,
+        styleString: 'assets/tileStyle2.json',
+      )
+    );
   }
 
   void onStyleLoadedCallback() {}
 }
+
