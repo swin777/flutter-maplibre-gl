@@ -1,4 +1,4 @@
-group 'com_mapbox_mapboxgl'
+group 'com.mapbox.mapboxgl'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -23,7 +23,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 20
