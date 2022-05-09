@@ -22,29 +22,63 @@ rootProject.allprojects {
 
 apply plugin: 'com.android.library'
 
-android {
-    compileSdkVersion 29
+// android {
+//     compileSdkVersion 29
 
-    defaultConfig {
-        minSdkVersion 20
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-    }
-    lintOptions {
-        disable 'InvalidPackage'
-    }
+//     defaultConfig {
+//         minSdkVersion 20
+//         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//         multiDexEnabled true
+//     }
+//     lintOptions {
+//         disable 'InvalidPackage'
+//     }
+//     compileOptions {
+//         sourceCompatibility JavaVersion.VERSION_1_8
+//         targetCompatibility JavaVersion.VERSION_1_8
+//     }
+//     dependencies {
+//         implementation 'org.maplibre.gl:android-sdk:9.5.1'
+//         implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
+//         implementation 'org.maplibre.gl:android-plugin-localization-v9:1.0.0'
+//         implementation 'org.maplibre.gl:android-plugin-offline-v9:1.0.0'
+//     }
+//     compileOptions {
+//         sourceCompatibility 1.8
+//         targetCompatibility 1.8
+//     }
+// }
+
+android {
+    compileSdkVersion flutter.compileSdkVersion
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    dependencies {
-        implementation 'org.maplibre.gl:android-sdk:9.5.1'
-        implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
-        implementation 'org.maplibre.gl:android-plugin-localization-v9:1.0.0'
-        implementation 'org.maplibre.gl:android-plugin-offline-v9:1.0.0'
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.example.kt_maplibre_app"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
     }
 }
