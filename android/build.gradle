@@ -1,4 +1,4 @@
-group 'com.mapbox.mapboxgl'
+group 'com_mapbox_mapboxgl'
 version '1.0-SNAPSHOT'
 
 buildscript {
