@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -15,7 +15,6 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
     }
 }
@@ -23,7 +22,9 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
+
+    compileSdkVersion 31
+    ndkVersion "20.1.5948944"
 
     defaultConfig {
         minSdkVersion 20
@@ -38,10 +39,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     dependencies {
-        implementation 'org.maplibre.gl:android-sdk:9.5.1'
+        implementation 'org.maplibre.gl:android-sdk:9.5.2'
         implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
         implementation 'org.maplibre.gl:android-plugin-localization-v9:1.0.0'
         implementation 'org.maplibre.gl:android-plugin-offline-v9:1.0.0'
+        implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
     }
     compileOptions {
         sourceCompatibility 1.8
